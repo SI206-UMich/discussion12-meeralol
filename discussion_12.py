@@ -58,20 +58,28 @@ def job_and_hire_date(cur, conn):
         ON Jobs.job_id = Employees.job_id
         """
     )
-    
+
     res = cur.fetchall()
     conn.commit()
     s = sorted(res, key = lambda x: x[0])
     return s[0][1]
 
-
-
-  
-
 # TASK 3: IDENTIFY PROBLEMATIC SALARY DATA
 # Apply JOIN clause to match individual employees
 def problematic_salary(cur, conn):
-    pass
+    cur.execute(
+        """
+        SELECT Employees.first_name, Employees.last_name
+        FROM Employees
+        JOIN Jobs ON Jobs.job_id = Employees.job_id
+        WHERE Employees.salary < Jobs.min_salary OR Employees.salary > Jobs.max_salary
+        """
+    )
+    res = cur.fetchall()
+    conn.commit()
+    return res
+
+    
 
 # TASK 4: VISUALIZATION
 def visualization_salary_data(cur, conn):
